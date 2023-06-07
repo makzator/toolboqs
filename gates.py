@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def _idx_to_dits(i, nstates):
+def idx_to_dits(i, nstates):
     # nstates = [n1, n2, n3...], |i> = |a1, a2, a3, ...>
     a = []
     idx = i
@@ -10,7 +10,7 @@ def _idx_to_dits(i, nstates):
         idx = idx // nstates[-1-n]
     return a[::-1]
 
-def _dits_to_idx(dits, nstates):
+def dits_to_idx(dits, nstates):
     inv_nstates_cumprod = np.ones(len(nstates))
     inv_nstates_cumprod[1:] = np.cumprod(nstates[:0:-1])
     return int(np.multiply(dits, inv_nstates_cumprod[::-1]).sum())
@@ -25,8 +25,8 @@ def extend(gate, ness, nguards):
     dimtot = ntot.prod()
     gate_full = np.zeros((dimtot,dimtot), dtype=complex)
 
-    idx_dits = [_idx_to_dits(i, ness) for i in range(dim_ess)]
-    idx_mapping = [_dits_to_idx(dits, ntot) for dits in idx_dits]
+    idx_dits = [idx_to_dits(i, ness) for i in range(dim_ess)]
+    idx_mapping = [dits_to_idx(dits, ntot) for dits in idx_dits]
 
     for i in range(dim_ess):
         for j in range(dim_ess):
